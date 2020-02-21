@@ -1,6 +1,6 @@
 # docker-kafka
 
-[![Build status](https://travis-ci.org/GuillaumeWaignier/kafka.svg?branch=master)](https://travis-ci.org/GuillaumeWaignier/kafka)
+[![Build status](https://travis-ci.org/GuillaumeWaignier/docker-kafka.svg?branch=master)](https://travis-ci.org/GuillaumeWaignier/docker-kafka)
 
 Docker image for Kafka.
 
