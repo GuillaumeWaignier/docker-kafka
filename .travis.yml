@@ -1,0 +1,18 @@
+language: java
+install: true
+
+
+script:
+  - docker build . -t $TRAVIS_COMMIT
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: bash docker_push.sh $TRAVIS_BRANCH
+    on:
+      tags: true
+  - provider: script
+    skip_cleanup: true
+    script: bash docker_push.sh latest
+    on:
+      branch: master
