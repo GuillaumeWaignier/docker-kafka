@@ -12,7 +12,9 @@ ENV PATH=/confluent-${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MINOR_VERSION}.${CONF
 
 ADD config /config
 
-RUN wget -O confluent.zip https://packages.confluent.io/archive/${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MINOR_VERSION}/confluent-${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MINOR_VERSION}.${CONFLUENT_FIX_VERSION}-${KAFKA_SCALA_VERSION}.zip \
+RUN apt-get update -y \
+    && apt-get install netcat -y \
+    && wget -O confluent.zip https://packages.confluent.io/archive/${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MINOR_VERSION}/confluent-${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MINOR_VERSION}.${CONFLUENT_FIX_VERSION}-${KAFKA_SCALA_VERSION}.zip \
     && unzip /confluent.zip -d / \
     && rm /confluent.zip \
     && chmod +x /config/start.sh
@@ -22,4 +24,5 @@ WORKDIR /config
 EXPOSE 9092
 VOLUME [ "/data"]
 
-CMD ["/config/start.sh"]
+ENTRYPOINT ["/config/start.sh"]
+CMD ["kafka-server-start"]
