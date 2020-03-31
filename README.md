@@ -147,6 +147,46 @@ services:
       retries: 3
       start_period: 2s
 
+  kafka-connect:
+    image: "ianitrix/kafka:${CONFLUENT_VERSION}"
+    command: connect-distributed
+    hostname: kafka-connect
+    depends_on:
+      - kafka
+    ports:
+      - 8083:8083
+    networks:
+      - confluent
+    healthcheck:
+      test: test `curl -s -o /dev/null -w "%{http_code}" http://localhost:8083/connectors` = 200
+      interval: 2s
+      timeout: 2s
+      retries: 10
+      start_period: 2s
+    environment:
+      - KAFKA_OPTS=-Xms512m -Xmx512m
+      - KAFKA_bootstrap_servers=kafka:9092
+      - KAFKA_rest_port=8083
+      - KAFKA_group_id=connect
+      - KAFKA_config_storage_topic=_connect-config
+      - KAFKA_offset_storage_topic=_connect-offsets
+      - KAFKA_status_storage_topic=_connect-status
+      - KAFKA_replication_factor=1
+      - KAFKA_config_storage_replication_factor=1
+      - KAFKA_offset_storage_replication_factor=1
+      - KAFKA_status_storage_replication_factor=1
+      - KAFKA_key_converter=org.apache.kafka.connect.json.JsonConverter
+      - KAFKA_value_converter=org.apache.kafka.connect.json.JsonConverter
+      - KAFKA_key_converter_schemas_enable=false
+      - KAFKA_value_converter_schemas_enable=false
+      - KAFKA_internal_key_converter=org.apache.kafka.connect.json.JsonConverter
+      - KAFKA_internal_value_converter=org.apache.kafka.connect.json.JsonConverter
+      - KAFKA_rest_advertised_host_name=kafka-connect
+      - KAFKA_plugin_path=/confluent-${CONFLUENT_VERSION}/share/java
+      - KAFKA_log4j_root_loglevel=INFO
+      - KAFKA_log4j_loggers=org.reflections=ERROR
+    restart: on-failure
+
 
   kafkahq:
     image: tchiotludo/kafkahq:0.12.0
