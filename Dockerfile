@@ -14,7 +14,7 @@ ADD config /config
 
 RUN apt-get update -y \
     && apt-get install netcat -y \
-    && wget -O confluent.zip https://packages.confluent.io/archive/${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MINOR_VERSION}/confluent-${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MINOR_VERSION}.${CONFLUENT_FIX_VERSION}-${KAFKA_SCALA_VERSION}.zip \
+    && wget -O confluent.zip https://packages.confluent.io/archive/${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MINOR_VERSION}/confluent-community-${CONFLUENT_MAJOR_VERSION}.${CONFLUENT_MINOR_VERSION}.${CONFLUENT_FIX_VERSION}-${KAFKA_SCALA_VERSION}.zip \
     && unzip /confluent.zip -d / \
     && rm /confluent.zip \
     && chmod +x /config/start.sh
